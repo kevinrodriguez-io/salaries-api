@@ -1,34 +1,48 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Clipboard Health Test Submission
 
-## Getting Started
+Built with ❤️ by Kevin Rodríguez.
 
-First, run the development server:
+## Overview
+
+Built with next.js and typescript. Uses docker-compose to run the app locally.
+
+### Api routes:
+
+- `/api/v1/health` - Health check
+- `/api/v1/auth` - POST: { username: string, password: string }
+- `/api/v1/salary` - POST: ```{
+    name: string;
+    salary: number;
+    currency: string;
+    department: string;
+    sub_department: string;
+}```
+- `/api/v1/[:name]` - DELETE
+- `/api/v1/summary-statistics` - GET - Returns summary statistics
+- `/api/v1/summary-statistics?onContract=true` - GET - Returns summary statistics for on contract
+- `/api/v1/summary-statistics?allDepartments=true` - GET - Returns summary statistics grouped by department
+- `/api/v1/summary-statistics?allDepartments=true&allSubdepartments=true` - GET - Returns summary statistics grouped by department and by subdepartment
+- 
+## Pre-requisites
+
+- Docker and Docker Compose
+
+## How to run
+
+Run with docker compose:
 
 ```bash
-npm run dev
-# or
-yarn dev
+$ docker compose up
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Run locally:
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+```bash
+$ yarn # Install deps
+$ yarn dev # Run dev server
+```
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+## Ruleset
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- Use lint + prettier to format code, follow the formatting conventions.
+- Tests should be running at ci/cd level.
