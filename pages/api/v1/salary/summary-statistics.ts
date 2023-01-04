@@ -16,9 +16,9 @@ type SummaryStatistics = {
 };
 
 type SummaryStatisticsResponse =
-  | Record<string, Record<string, SummaryStatistics>>
-  | Record<string, SummaryStatistics>
-  | SummaryStatistics
+  | Record<string, Record<string, SummaryStatistics>> // department -> subdepartment -> summary statistics
+  | Record<string, SummaryStatistics> // department -> summary statistics
+  | SummaryStatistics // all departments
   | { error?: string };
 
 const getSummaryStatistics = (items: Salary[]) => {
@@ -73,7 +73,6 @@ const handler: NextApiHandler<SummaryStatisticsResponse> = async (req, res) => {
     res.status(200).json(compoundResponse);
   }
 
-  // get all departments so we can then group by subdepartment
   const allDepartmentsInDB = db.data!.salaries.map((i) => i.department);
   const compoundResponse: Record<
     string,

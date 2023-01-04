@@ -7,13 +7,13 @@ const cors = Cors({
   methods: ['POST', 'GET', 'HEAD'],
 });
 
-type Response = {
-  running: boolean;
+type HealthResponse = {
+  ok: boolean;
 };
 
-const handler: NextApiHandler<Response> = async (req, res) => {
+const handler: NextApiHandler<HealthResponse> = async (req, res) => {
   await runMiddleware(req, res, cors);
-  res.status(200).json({ running: true });
+  res.status(200).json({ ok: true });
 };
 
 export default handler;

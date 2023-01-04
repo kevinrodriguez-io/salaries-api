@@ -9,11 +9,7 @@ const cors = Cors({
   methods: ['POST', 'GET', 'HEAD'],
 });
 
-type SalaryDeleteResult =
-  | {
-      ok: true;
-    }
-  | { error?: string };
+type SalaryDeleteResult = { ok: true } | { error?: string };
 
 const handler: NextApiHandler<SalaryDeleteResult> = async (req, res) => {
   await runMiddleware(req, res, cors);
