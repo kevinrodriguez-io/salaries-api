@@ -1,4 +1,4 @@
-# --- STEP 1: DEPENDENCIES
+# --- STEP 1: DEPENDENCIES ---
 FROM node:16-alpine AS deps
 # Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
 RUN apk add --no-cache libc6-compat
@@ -9,9 +9,9 @@ RUN \
     if [ -f yarn.lock ]; then yarn --frozen-lockfile; \
     else echo "Lockfile not found." && exit 1; \
     fi
-# --- STEP 1: DEPENDENCIES
+# --- STEP 1: DEPENDENCIES ---
 
-# --- STEP 2: BUILDER
+# --- STEP 2: BUILDER ---
 FROM node:16-alpine AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
@@ -20,9 +20,9 @@ COPY . .
 ENV NEXT_TELEMETRY_DISABLED 1
 
 RUN yarn build
-# --- END OF STEP 2: BUILDER
+# --- END OF STEP 2: BUILDER ---
 
-# --- STEP 3: RUNNER
+# --- STEP 3: RUNNER ---
 FROM node:16-alpine AS runner
 WORKDIR /app
 
@@ -55,4 +55,4 @@ ENV PORT 3000
 
 CMD ["node", "server.js"]
 
-# --- END OF STEP 3: RUNNER
+# --- END OF STEP 3: RUNNER ---
