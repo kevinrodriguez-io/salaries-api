@@ -6,7 +6,7 @@ import { authenticate } from '../auth';
 import { getDB } from '../../../../lib/lowWithLodash';
 
 const cors = Cors({
-  methods: ['POST', 'GET', 'HEAD'],
+  methods: ['POST', 'GET', 'HEAD', 'DELETE'],
 });
 
 type SalaryDeleteResult = { ok: true } | { error?: string };
