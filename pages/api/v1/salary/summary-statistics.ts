@@ -39,8 +39,8 @@ const handler: NextApiHandler<SummaryStatisticsResponse> = async (req, res) => {
     return;
   }
 
-  const allDepartments = req.query.department as string | undefined;
-  const allSubdepartments = req.query.subDepartment as string | undefined;
+  const allDepartments = req.query.allDepartments as boolean | undefined;
+  const allSubdepartments = req.query.allSubdepartments as boolean | undefined;
   const onContract = req.query.onContract as boolean | undefined;
 
   const db = getDB();
@@ -74,6 +74,7 @@ const handler: NextApiHandler<SummaryStatisticsResponse> = async (req, res) => {
       compoundResponse[department] = { min, max, mean };
     }
     res.status(200).json(compoundResponse);
+    return;
   }
 
   const allDepartmentsInDB = db
@@ -85,18 +86,14 @@ const handler: NextApiHandler<SummaryStatisticsResponse> = async (req, res) => {
     Record<string, SummaryStatistics>
   > = {};
   for (const department of allDepartmentsInDB) {
-    const allSubdepartmentsForThisDepartment = db
+    const groupedSalaries = db
       .get('salaries')
       .filter((i) => i.department === department)
-      .groupBy((i) => i.sub_department);
-    for (const [subdepartment, salaries] of Object.entries(
-      allSubdepartmentsForThisDepartment,
-    )) {
+      .groupBy((i) => i.sub_department)
+      .value();
+    for (const [subdepartment, salaries] of Object.entries(groupedSalaries)) {
       const { min, max, mean } = getSummaryStatistics(salaries);
-      compoundResponse[department] = {
-        ...compoundResponse[department],
-        [subdepartment]: { min, max, mean },
-      };
+      (compoundResponse[department] ||= {})[subdepartment] = { min, max, mean };
     }
   }
 
