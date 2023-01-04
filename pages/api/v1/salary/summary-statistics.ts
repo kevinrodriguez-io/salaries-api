@@ -47,21 +47,24 @@ const handler: NextApiHandler<SummaryStatisticsResponse> = async (req, res) => {
 
   // TODO: Cascade filters so they all add up.
   if (onContract) {
-    const onContractSalaries = db.data!.salaries.filter((e) => !!e.on_contract);
+    const onContractSalaries = db
+      .get('salaries')
+      .filter((e) => !!e.on_contract)
+      .value();
     const { min, max, mean } = getSummaryStatistics(onContractSalaries);
     res.status(200).json({ min, max, mean });
     return;
   }
 
   if (!allDepartments) {
-    const allSalaries = db.data!.salaries;
+    const allSalaries = db.get('salaries').value();
     const { min, max, mean } = getSummaryStatistics(allSalaries);
     res.status(200).json({ min, max, mean });
     return;
   }
 
   if (!allSubdepartments) {
-    const groupedSalaries = db.chain
+    const groupedSalaries = db
       .get('salaries')
       .groupBy((i) => i.department)
       .value();
@@ -73,13 +76,16 @@ const handler: NextApiHandler<SummaryStatisticsResponse> = async (req, res) => {
     res.status(200).json(compoundResponse);
   }
 
-  const allDepartmentsInDB = db.data!.salaries.map((i) => i.department);
+  const allDepartmentsInDB = db
+    .get('salaries')
+    .map((i) => i.department)
+    .value();
   const compoundResponse: Record<
     string,
     Record<string, SummaryStatistics>
   > = {};
   for (const department of allDepartmentsInDB) {
-    const allSubdepartmentsForThisDepartment = db.chain
+    const allSubdepartmentsForThisDepartment = db
       .get('salaries')
       .filter((i) => i.department === department)
       .groupBy((i) => i.sub_department);

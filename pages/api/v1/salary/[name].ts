@@ -24,13 +24,14 @@ const handler: NextApiHandler<SalaryDeleteResult> = async (req, res) => {
   }
   const name = req.query.name as string;
   const db = getDB();
-  const index = db.data!.salaries.findIndex((e) => e.name === name);
-  if (index === -1) {
+  const item = db
+    .get('salaries')
+    .remove((salary) => salary.name === name)
+    .write();
+  if (!item) {
     res.status(404).json({ error: 'NOT_FOUND' });
     return;
   }
-  db.data!.salaries.splice(index, 1);
-  await db.write();
   res.status(200).json({ ok: true });
 };
 

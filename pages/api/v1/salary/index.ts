@@ -28,8 +28,7 @@ const handler: NextApiHandler<SalaryPostResult> = async (req, res) => {
     return;
   }
   const db = getDB();
-  db.data!.salaries.push(parseResult.data);
-  await db.write();
+  db.get('salaries').push(parseResult.data).write();
   res.status(200).json({ ok: true });
 };
 
