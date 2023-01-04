@@ -28,3 +28,14 @@ export const signJwt = (payload: JWTPayload, privateKey: string) =>
       },
     );
   });
+
+export const verifyJwt = (token: string, publicKey: string) =>
+  new Promise<string | jwt.JwtPayload | undefined>((req, res) => {
+    jwt.verify(token, publicKey, (err, decoded) => {
+      if (err) {
+        res(err);
+      } else {
+        req(decoded);
+      }
+    });
+  });
